@@ -47,7 +47,7 @@ export default function GoalList({ refreshFlag }) {
                     ref={prov.innerRef}
                     {...prov.draggableProps}
                     {...prov.dragHandleProps}
-                    className="border p-2 mb-2 flex justify-between items-center"
+                    className="border-b border-gray-600  p-2 mb-2 flex justify-between items-center"
                   >
                     <div>
                       <div className="font-medium">{g.name}</div>

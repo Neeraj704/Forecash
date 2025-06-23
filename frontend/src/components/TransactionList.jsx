@@ -20,10 +20,10 @@ export default function TransactionList({ refreshFlag }) {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-2">Transactions</h2>
+      <h2 className="text-xl font-semibold mb-8">Transactions</h2>
       <ul className="space-y-1">
         {txns.map(t=>(
-          <li key={t.id} className="flex justify-between border-b pb-1">
+          <li key={t.id} className="flex py-2 justify-between border-b border-gray-600 mb-5">
             <span>{t.description||'–'}: ₹{t.amount.toFixed(2)}</span>
             <button onClick={()=>del(t.id)} className="text-red-500">Delete</button>
           </li>

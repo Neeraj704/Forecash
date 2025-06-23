@@ -9,8 +9,8 @@ export default function Navbar(){
     logout();
   };
   return (
-    <nav className="bg-blue-600 text-white p-4 flex justify-between">
-      <div>Expenditure Predictor</div>
+    <nav className="max-h-16 bg-[#2E3137] rounded-4xl shadow  text-white p-4 flex justify-between m-3">
+      <div>ForeCash</div>
       <button onClick={handle} className="underline">Logout</button>
     </nav>
   );
