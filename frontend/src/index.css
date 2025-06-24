@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+:root {
+  --primary-color: #1d4ed8; /* blue-600 */
+  --secondary-color: #6b5ce5; /* purple-600 */
+  --background-color: #000717; /* darkblue */
+  --primary-font: "Poppins", sans-serif;
+  --secondary-font: "Roboto", sans-serif;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--primary-font);
+  background-color: var(--background-color);
+}

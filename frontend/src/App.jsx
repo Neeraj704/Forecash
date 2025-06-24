@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import { useAuthStore } from "./store/authStore";
 import { getMe } from "./api/user";
 import HomePage from "./pages/Home";
+import LoginForm from "./components/LoginForm";
 
 export default function App() {
   const { user, setAuth, setToken, logout } = useAuthStore();
