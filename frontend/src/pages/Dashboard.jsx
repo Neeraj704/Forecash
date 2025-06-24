@@ -76,7 +76,7 @@ export default function Dashboard(){
                       </div>
                     </div>
                     <button onClick={()=>setShowTxnModal(true)}
-                            className="bg-[#FFF27A] text-gray-900 px-4 py-2 rounded-4xl mt-10">
+                            className="bg-[#FFF27A] text-gray-900 px-4 py-2 rounded-4xl mt-10 hover:bg-[#ffef60] active:bg-[#ffea28] cursor-pointer">
                       Create Transaction
                     </button>
                   </div>

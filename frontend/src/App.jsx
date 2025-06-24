@@ -36,11 +36,13 @@ export default function App(){
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/auth" element={!user ? <AuthPage/> : <Navigate to="/dashboard" replace/>}/>
-        <Route path="/dashboard" element={user ? <Dashboard/> : <Navigate to="/auth" replace/>}/>
-        <Route path="*" element={<Navigate to={user ? "/dashboard" : "/auth"} replace/>}/>
-      </Routes>
+      <div className='bg-[#1E1E21]'>
+        <Routes>
+          <Route path="/auth" element={!user ? <AuthPage/> : <Navigate to="/dashboard" replace/>}/>
+          <Route path="/dashboard" element={user ? <Dashboard/> : <Navigate to="/auth" replace/>}/>
+          <Route path="*" element={<Navigate to={user ? "/dashboard" : "/auth"} replace/>}/>
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }

@@ -4,7 +4,7 @@ import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { getTransactions } from '../api/transaction';
 import { useAuthStore } from '../store/authStore';
 
-const COLORS = ['#FFD700', '#FFFFFF', '#FF6B6B']; // Custom theme: yellow, white, red
+const COLORS = ['#ed7f19','#eae3e3','#eddf19','#84e0ee', 'FF6B6B']; 
 
 export default function CategoryDonutChart() {
   const { accessToken } = useAuthStore();
