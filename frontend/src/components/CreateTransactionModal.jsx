@@ -7,7 +7,7 @@ import { runMLAndDistribute } from '../api/ml';
 
 Modal.setAppElement('#root');
 
-export default function CreateTransactionModal({ isOpen, onRequestClose, onSuccess }){
+export default function CreateTransactionModal({ isOpen, onRequestClose, onSuccess, type }){
   const { accessToken, refreshUser } = useAuthStore();
   const [cats, setCats] = useState([]);
   const [amount, setAmount] = useState('');
@@ -36,9 +36,10 @@ export default function CreateTransactionModal({ isOpen, onRequestClose, onSucce
   };
 
   const submit = async ()=>{
-    await createTransaction({ amount:parseFloat(amount), description:desc, categoryName:selCat }, accessToken);
+    await createTransaction({ amount:parseFloat(amount), description:desc, categoryName:selCat, type }, accessToken);
     onRequestClose();
     await refreshUser();
+    runMLAndDistribute();
     const mlAmt = await runMLAndDistribute(accessToken);
     console.log(`ML distributed ₹${mlAmt}`);
     onSuccess();
@@ -46,7 +47,9 @@ export default function CreateTransactionModal({ isOpen, onRequestClose, onSucce
 
   return (
     <Modal isOpen={isOpen} className="p-4 bg-white max-w-md mx-auto mt-20" overlayClassName="fixed inset-0 bg-black bg-opacity-50">
-      <h2 className="text-xl mb-4">Create Transaction</h2>
+      <h2 className="text-xl mb-4">
+        {type === "income" ? "Add Income" : "Add Expense"}
+      </h2>
       <div className="space-y-2">
         <input type="number" placeholder="Amount" value={amount} onChange={e=>setAmount(e.target.value)} className="w-full border p-2"/>
         <input type="text" placeholder="Description" value={desc} onChange={e=>setDesc(e.target.value)} className="w-full border p-2"/>
