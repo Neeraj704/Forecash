@@ -29,8 +29,8 @@ export default function SignupForm() {
 
   return (
     <div className="w-full mx-auto min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-blue-400 to-purple-400">
-      <div className="max-w-5xl px-20 shadow-lg bg-white p-8 rounded-xl">
-        <form onSubmit={handle} className=" space-y-6">
+      <div className="max-w-3xl shadow-lg bg-white p-8 rounded-xl w-full sm:w-[28rem]">
+        <form onSubmit={handle} className="space-y-5">
           <div className="text-center mb-6 flex flex-col gap-4 items-center">
             <div className="flex items-center space-x-2">
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
@@ -45,8 +45,8 @@ export default function SignupForm() {
             </h2>
           </div>
 
-          <div className="space-y-4">
-            <div>
+          <div className="space-y-">
+            <div className="mb-5">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Name
               </label>
@@ -56,11 +56,11 @@ export default function SignupForm() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
-            <div>
+            <div className="mb-5">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
               </label>
@@ -70,11 +70,11 @@ export default function SignupForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
-            <div>
+            <div className="mb-5">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
@@ -84,11 +84,11 @@ export default function SignupForm() {
                 value={pw}
                 onChange={(e) => setPw(e.target.value)}
                 required
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
-            <div>
+            <div className="mb-5">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Confirm Password
               </label>
@@ -98,7 +98,7 @@ export default function SignupForm() {
                 value={confirmPw}
                 onChange={(e) => setConfirmPw(e.target.value)}
                 required
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 

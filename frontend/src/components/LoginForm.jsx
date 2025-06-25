@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoMdTrendingUp } from "react-icons/io";
 export default function LoginForm() {
   const [email, setEmail] = useState(""),
-    [pw, setPw] = useState("");
+  [pw, setPw] = useState("");
   const setAuth = useAuthStore((s) => s.setAuth);
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ export default function LoginForm() {
   };
   return (
     <div className="w-full mx-auto min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-blue-400 to-purple-400 ">
-      <div className=" max-w-3xl  shadow-lg bg-white p-8 rounded-xl ">
+      <div className="max-w-3xl shadow-lg bg-white p-8 rounded-xl w-full sm:w-[28rem]">
         {/* Logo */}
         <div className="flex flex-col gap-4 items-center text-center mb-8">
           <div className="flex items-center space-x-2">
@@ -34,7 +34,7 @@ export default function LoginForm() {
             </span>
           </div>
 
-          <p className="text-sm text-gray-500">Welcome Back!</p>
+          <p className="text-xl font-bold text-gray-800 ">Welcome Back!</p>
         </div>
 
         {/* Form */}
