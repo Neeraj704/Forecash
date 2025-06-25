@@ -21,6 +21,7 @@ export default function Dashboard(){
   const [spentToday, setSpentToday] = useState(0);
   const [goalFlag, setGoalFlag] = useState(0);
   const [showGoalModal, setShowGoalModal] = useState(false);
+  const [txnType, setTxnType] = useState('expense');
 
   useEffect(() => {
     getTransactions(accessToken).then(res => {
@@ -41,7 +42,7 @@ export default function Dashboard(){
 
 
   return (
-    <div className='flex flex-col min-h-screen bg-[#1E1E21] text-white p-2'>
+    <div className='flex flex-col min-h-screen text-white p-2'>
       <Navbar/>
       <div className="flex flex-1 h-full">
         <Sidebar/>
@@ -57,7 +58,7 @@ export default function Dashboard(){
             </div>
             <div className='flex-1'>
               {/* START OF LEFT 4 BOXES THING */} 
-              <div className='flex flex-col flex-1 p-2 gap-5 h-full items-stretch'>
+              <div className='flex flex-col flex-1 gap-5 h-full items-stretch'>
 
                 <div className='flex flex-1 gap-5'>
                   {/* FIRST BOX  */}
@@ -75,10 +76,18 @@ export default function Dashboard(){
                         ₹{user.balance.toFixed(2)}
                       </div>
                     </div>
-                    <button onClick={()=>setShowTxnModal(true)}
-                            className="bg-[#FFF27A] text-gray-900 px-4 py-2 rounded-4xl mt-10">
-                      Create Transaction
-                    </button>
+                      <button
+                        onClick={() => { setTxnType('income'); setShowTxnModal(true); }}
+                        className="bg-green-500 text-white px-4 py-2 rounded"
+                      >
+                        Add Income
+                      </button>
+                      <button
+                        onClick={() => { setTxnType('expense'); setShowTxnModal(true); }}
+                        className="bg-red-500 text-white px-4 py-2 rounded"
+                      >
+                        Add Expense
+                      </button>
                   </div>
                   {/* END OF FIRST BOX  */}
 
@@ -125,33 +134,45 @@ export default function Dashboard(){
           </div>
 
           {/* START OF TRANSACTION SIDE THINGS */}
-          <div className='m-3 bg-[#2E3137] rounded-2xl shadow p-6 flex flex-col justify-between'> 
+          <div className='m-3 flex flex-col justify-between gap-5'> 
             {/* FIRST BOX  */}
-            <div className=''>
+            <div className='bg-[#2E3137] p-6 flex-1 rounded-2xl'>
               <TransactionList refreshFlag={txnFlag}/>
             </div>
             {/* END OF FIRST BOX  */}
 
             {/* SECOND BOX  */}
-            <div>
-              <div className="text-gray-600">
-                <p>Limit Left</p>
-                <button
-                  onClick={() => {
-                    refreshUser();
-                    setTxnFlag(f => f);
-                  }}
-                  className="text-sm text-blue-500 underline"
-                >
-                  Refresh
-                </button>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-48 bg-gray-200 h-2 rounded mt-1">
-                  <div className="bg-[#FFF27A] h-2 rounded" style={{ width:`${pct}%` }} />
+            <div className='bg-[#2E3137] p-6 rounded-2xl shadow'>
+              <div className="text-gray-600 flex justify-between">
+                <div>
+                  <p>Limit Left</p>
                 </div>
+                <div>
+                  <button
+                    onClick={() => {
+                      refreshUser();
+                      setTxnFlag(f => f);
+                    }}
+                    className="text-sm text-blue-500 underline"
+                  >
+                    Refresh
+                  </button>
+                </div>
+                <div>
+                  <button
+                    onClick={() => setShowBLModal(true)}
+                    className="text-sm text-blue-500 underline"
+                  >
+                    Edit
+                  </button>
+                </div>
+              </div>
+              <div className="flex flex-col items-center space-x-2">
                 <div className="text-2xl font-bold">
                   ₹{limitLeft.toFixed(2)}
+                </div>
+                <div className="w-48 bg-gray-200 h-2 rounded mt-1">
+                  <div className="bg-[#FFF27A] h-2 rounded" style={{ width:`${pct}%` }} />
                 </div>
               </div>
             </div>
@@ -169,6 +190,7 @@ export default function Dashboard(){
           setTxnFlag(f => f + 1);
           setGoalFlag(f => f + 1);    
         }}
+        type={txnType}
       />
       <AddGoalModal
         isOpen={showGoalModal}

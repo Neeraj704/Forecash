@@ -52,11 +52,11 @@ export default function App() {
         />
         <Route
           path="/dashboard"
-          element={user ? <Dashboard /> : <Navigate to="/auth" replace />}
+          element={user ? <Dashboard /> : <Navigate to="/" replace />}
         />
         <Route
           path="*"
-          element={<Navigate to={user ? "/dashboard" : "/auth"} replace />}
+          element={<Navigate to={user ? "/dashboard" : "/"} replace />}
         />
       </Routes>
     </BrowserRouter>
