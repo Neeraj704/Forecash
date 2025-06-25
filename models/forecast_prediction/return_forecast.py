@@ -288,5 +288,7 @@ def return_forecast(initial_balance, transactions):
     # Disable toolbar for cleaner embedding
     plot_json = fig.to_json()
 
-    return json.loads(plot_json)
-
+    return {
+    "graph": json.loads(plot_json),
+    "monthEndBalance": predictions_further[29]
+    }
