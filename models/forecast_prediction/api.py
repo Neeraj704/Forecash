@@ -25,7 +25,7 @@ class BalanceRequest(BaseModel):
 
 api.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:3000","http://localhost:3000","https://hoppscotch.io"],
+    allow_origins=["http://127.0.0.1:3000","http://localhost:3000","https://hoppscotch.io","http://localhost:5173/dashboard"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
