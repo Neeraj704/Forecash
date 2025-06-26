@@ -7,6 +7,7 @@ router.get('/',     auth, ctrl.getGoals);
 router.delete('/:id', auth, ctrl.deleteGoal);
 router.post('/distribute', auth, ctrl.autoDistributeSavings);
 router.put('/reorder', auth, ctrl.reorderGoals);
+router.post('/reset-distribute', auth, ctrl.resetAndDistribute);
 
 
 module.exports = router;

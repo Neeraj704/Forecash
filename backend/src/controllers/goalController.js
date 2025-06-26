@@ -50,3 +50,18 @@ exports.reorderGoals = async (req, res, next) => {
     res.json(updates);
   } catch (e) { next(e); }
 };
+
+exports.resetAndDistribute = async (req, res, next) => {
+  try {
+    const { amount } = req.body;
+    const userId = req.user.id;
+    // reset all goals
+    await prisma.goal.updateMany({
+      where: { userId },
+      data: { current: 0 }
+    });
+    // then reuse your distribute utility
+    const updates = await distribute(userId, amount);
+    res.json(updates);
+  } catch (e) { next(e); }
+};

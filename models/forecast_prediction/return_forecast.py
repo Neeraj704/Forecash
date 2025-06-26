@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import json
+import calendar
 
 
 model = load_model('test_try.h5')
@@ -88,6 +89,7 @@ def return_forecast(initial_balance, transactions):
     last_date = datetime.strptime(last_date, '%Y-%m-%d')
 
     next_10_dates = [(last_date + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(1, 11)]
+    next_30_dates = [(last_date + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(1, 31)]
     #print(next_10_dates)
 
 
@@ -106,6 +108,34 @@ def return_forecast(initial_balance, transactions):
     print(predictions_flat)
     print(index_1)
     print(index_2)
+
+    dates = [datetime.strptime(date, "%Y-%m-%d") if isinstance(date, str) else date for date in next_30_dates]
+
+    month_to_dates = {}
+
+    # Group dates by (year, month)
+    for i, date in enumerate(dates):
+        key = (date.year, date.month)
+        if key not in month_to_dates:
+            month_to_dates[key] = []
+        month_to_dates[key].append((date, i))  # Store date and its index
+
+    month_end_predictions = []
+
+    for key in sorted(month_to_dates.keys()):
+        year, month = key
+        last_day = calendar.monthrange(year, month)[1]
+
+        found = None
+        for date, idx in month_to_dates[key]:
+            if date.day == last_day:
+                found = idx
+                break
+
+        if found is None:
+            found = max(month_to_dates[key], key=lambda x: x[0])[1]
+
+        month_end_predictions.append((dates[found].strftime("%Y-%m-%d"), predictions_further[found]))
 
     # Create the interactive plotly figure
     fig = go.Figure()
@@ -290,5 +320,5 @@ def return_forecast(initial_balance, transactions):
 
     return {
     "graph": json.loads(plot_json),
-    "monthEndBalance": predictions_further[29]
+    "monthEndBalance": month_end_predictions
     }

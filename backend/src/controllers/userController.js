@@ -8,19 +8,35 @@ const blSchema = z.object({
 });
 
 exports.getCurrentUser = async (req,res,next)=>{
-  try {
-    const user = await prisma.user.findUnique({where:{id:req.user.id}});
-    res.json(user);
-  } catch(e){ next(e); }
+  const user = await prisma.user.findUnique({
+    where:{id:req.user.id},
+    select: {
+      id: true, email: true, name: true,
+      balance: true, dailyLimit: true, initialBalance: true
+    }
+  });
+  res.json(user);
 };
 
 exports.setBalanceAndLimit = async (req,res,next)=>{
   try {
     const { balance,dailyLimit } = blSchema.parse(req.body);
+    const current = await prisma.user.findUnique({
+      where: { id: req.user.id }
+    });
+    const data = {
+      balance,
+      dailyLimit
+    };
+    if (current.initialBalance == null) {
+      data.initialBalance = balance;
+    }
     const updated = await prisma.user.update({
-      where:{id:req.user.id},
-      data:{ balance, dailyLimit }
+      where: { id: req.user.id },
+      data
     });
     res.json(updated);
-  } catch(e){ next(e); }
+  } catch(e){ 
+    next(e);
+  }
 };
