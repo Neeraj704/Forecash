@@ -112,7 +112,7 @@ async def return_answer(query, user, isAllowed, ifTransactions):
     )
 
     response = client.chat.completions.create(
-    model="deepseek/deepseek-r1-0528:free",
+    model="deepseek/deepseek-r1-0528-qwen3-8b:free",
     messages=[{"role": "user", "content": str(final_prompt)}],
     temperature = 0.9
     )
