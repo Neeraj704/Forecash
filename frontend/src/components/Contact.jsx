@@ -4,6 +4,7 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Send, Mail, Phone } from "lucide-react";
 import { MdContactSupport } from "react-icons/md";
+import { sendContactMessage } from '../api/contact';
 
 const Contact = () => {
   const ref = useRef(null);
@@ -14,12 +15,16 @@ const Contact = () => {
     message: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
-    // Reset form
-    setFormData({ name: "", email: "", message: "" });
+    try {
+      await sendContactMessage(formData);
+      alert('Thanks! We received your message.');
+      setFormData({ name: "", email: "", message: "" });
+    } catch (err) {
+      console.error('Contact API error:', err);
+      alert('Sorry, something went wrong. Please try again.');
+    }
   };
 
   const handleChange = (e) => {

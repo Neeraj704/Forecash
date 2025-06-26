@@ -10,7 +10,7 @@ const accountRoutes = require('./routes/account');
 const categoryRoutes = require('./routes/category');
 const txnRoutes = require('./routes/transaction');
 const goalRoutes = require('./routes/goal');
-const mlRoutes = require('./routes/ml');
+const contactRoutes = require('./routes/contact');
 
 app.use(express.json());
 app.use(cookieParser());   
@@ -24,7 +24,7 @@ app.use('/api/account', accountRoutes);
 app.use('/api/category', categoryRoutes);
 app.use('/api/transaction', txnRoutes);
 app.use('/api/goal', goalRoutes);
-app.use('/api/ml', mlRoutes);
+app.use('/api/contact', contactRoutes);
 
 app.use(require('./middleware/errorHandler'));
 

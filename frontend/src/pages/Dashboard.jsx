@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import BalanceModal from '../components/BalanceModal';
 import CreateTransactionModal from '../components/CreateTransactionModal';
 import TransactionList from '../components/TransactionList';
-import GoalForm from '../components/GoalForm';
 import GoalList from '../components/GoalList';
 import CategoryPieChart from '../components/PieChart';
-import SavingsGraph from '../components/SavingsGraph';
 import { useAuthStore } from '../store/authStore';
 import { getTransactions } from '../api/transaction';
 import AddGoalModal from '../components/AddGoalModal';
-import mlDummy from '../assets/mlDummy.png';
+import ForecastPlotly from '../components/ForecastPlotly';
+import { forecast } from '../api/ml';
+import axios from 'axios';
 
 export default function Dashboard(){
   const { user, refreshUser, accessToken } = useAuthStore();
@@ -22,16 +22,34 @@ export default function Dashboard(){
   const [goalFlag, setGoalFlag] = useState(0);
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [txnType, setTxnType] = useState('expense');
+  const [forecastData, setForecastData] = useState(null);
+  const hasMounted = useRef(false);
 
   useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
     getTransactions(accessToken).then(res => {
       const today = new Date().toISOString().slice(0, 10);
       const spent = res.data
-        .filter(t => t.date.startsWith(today))
+        .filter(t => t.date.startsWith(today) && t.type === 'expense')
         .reduce((sum, t) => sum + t.amount, 0);
       setSpentToday(spent);
-    });
-  }, [txnFlag]);
+      const allTxns = res.data;
+      forecast(user, allTxns)
+        .then(received_data => {
+          setForecastData(received_data);
+          axios.post(
+            `${import.meta.env.VITE_API_URL}/goal/reset-distribute`,
+              { amount: received_data.graph.data[1].y[received_data.graph.data[1].y.length - 1] },
+              { headers: { Authorization: `Bearer ${accessToken}` } }
+          ).then(() => {
+            setGoalFlag(f => f + 1);
+          });
+        });
+    }); 
+  }, [txnFlag, accessToken]);
 
   useEffect(()=>{
     if(user && (user.balance===0 && user.dailyLimit===0)) setShowBLModal(true);
@@ -92,10 +110,14 @@ export default function Dashboard(){
                   {/* END OF FIRST BOX  */}
 
                   {/* SECOND BOX  */}
-                  <div className='flex-[66%] bg-[#2E3137] h-full rounded-2xl shadow p-6 relative overflow-hidden'>
-                    <div>
-                      <img src={mlDummy} className='absolute top-3 center'></img>
-                    </div>
+                  <div className='flex-[66%] bg-[#2E3137] h-full rounded-2xl shadow p-6 relative overflow-scroll'>
+                      {forecastData ? (
+                        <ForecastPlotly graph={forecastData.graph} />
+                          ) : (
+                        <div className="flex items-center justify-center h-full">
+                          <span className="text-gray-500">Loading forecast…</span>
+                        </div>
+                      )}
                     {/* <SavingsGraph/> */}
                   </div>
                   {/* END OF SECOND BOX  */}

@@ -6,10 +6,17 @@ export default function TransactionList({ refreshFlag }) {
   const { accessToken } = useAuthStore();
   const [txns, setTxns] = useState([]);
   const [filter, setFilter] = useState('all');
+  const { refreshUser } = useAuthStore();
 
   const load = async () => {
     const res = await getTransactions(accessToken);
     setTxns(res.data);
+  };
+
+  const del = async id => {
+    await deleteTransaction(id, accessToken);
+    await refreshUser();
+    load();
   };
 
   useEffect(() => { load(); }, [refreshFlag]);
@@ -41,8 +48,7 @@ export default function TransactionList({ refreshFlag }) {
                 ₹{t.amount.toFixed(2)}
               </span>
             </span>
-            <button onClick={()=>{ deleteTransaction(t.id, accessToken); load(); }}
-                    className="text-red-500">Delete</button>
+            <button onClick={() => del(t.id)} className="text-red-500">Delete</button>
           </li>
         ))}
       </ul>

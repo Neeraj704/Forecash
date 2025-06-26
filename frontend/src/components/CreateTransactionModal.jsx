@@ -3,7 +3,6 @@ import Modal from 'react-modal';
 import { getCategories, createCategory } from '../api/category';
 import { createTransaction } from '../api/transaction';
 import { useAuthStore } from '../store/authStore';
-import { runMLAndDistribute } from '../api/ml';
 
 Modal.setAppElement('#root');
 
@@ -39,9 +38,6 @@ export default function CreateTransactionModal({ isOpen, onRequestClose, onSucce
     await createTransaction({ amount:parseFloat(amount), description:desc, categoryName:selCat, type }, accessToken);
     onRequestClose();
     await refreshUser();
-    runMLAndDistribute();
-    const mlAmt = await runMLAndDistribute(accessToken);
-    console.log(`ML distributed ₹${mlAmt}`);
     onSuccess();
   };
 

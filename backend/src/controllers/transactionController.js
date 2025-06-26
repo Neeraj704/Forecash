@@ -76,15 +76,23 @@ exports.getTransactions = async (req,res,next)=>{
   } catch(e){ next(e); }
 };
 
-exports.deleteTransaction = async (req,res,next)=>{
+exports.deleteTransaction = async (req, res, next) => {
   try {
     const id = +req.params.id;
-    const txn = await prisma.transaction.delete({where:{id}});
-    // refund
-    const user = await prisma.user.update({
-      where:{id:txn.userId},
-      data:{ balance:{ increment: txn.amount } }
+    const txn = await prisma.transaction.delete({
+      where: { id },
+      select: { id: true, amount: true, type: true, userId: true }
     });
-    res.json({message:'deleted', balance: user.balance});
-  } catch(e){ next(e); }
+    const balanceUpdate =
+      txn.type === 'expense'
+        ? { increment: txn.amount }
+        : { decrement: txn.amount };
+    const user = await prisma.user.update({
+      where: { id: txn.userId },
+      data: { balance: balanceUpdate }
+    });
+    res.json({ message: 'Transaction deleted', balance: user.balance });
+  } catch (e) {
+    next(e);
+  }
 };
