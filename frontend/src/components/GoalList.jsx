@@ -1,9 +1,9 @@
 // frontend/src/components/GoalList.jsx
-import React, { useState, useEffect } from 'react';
-import { deleteGoal, getGoals, reorderGoals } from '../api/goal';
-import { useAuthStore } from '../store/authStore';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-
+import React, { useState, useEffect } from "react";
+import { deleteGoal, getGoals, reorderGoals } from "../api/goal";
+import { useAuthStore } from "../store/authStore";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { MdDelete } from "react-icons/md";
 export default function GoalList({ refreshFlag }) {
   const { accessToken } = useAuthStore();
   const [goals, setGoals] = useState([]);
@@ -15,7 +15,7 @@ export default function GoalList({ refreshFlag }) {
   };
 
   // delete + reload
-  const handleDelete = async id => {
+  const handleDelete = async (id) => {
     await deleteGoal(id, accessToken);
     await load();
   };
@@ -27,7 +27,7 @@ export default function GoalList({ refreshFlag }) {
     const [moved] = items.splice(source.index, 1);
     items.splice(destination.index, 0, moved);
     setGoals(items);
-    const order = items.map(g => g.id);
+    const order = items.map((g) => g.id);
     await reorderGoals(order, accessToken);
   };
 
@@ -39,7 +39,7 @@ export default function GoalList({ refreshFlag }) {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="goals">
-        {provided => (
+        {(provided) => (
           <ul ref={provided.innerRef} {...provided.droppableProps}>
             {goals.map((g, idx) => {
               const percent = g.target
@@ -47,7 +47,7 @@ export default function GoalList({ refreshFlag }) {
                 : 0;
               return (
                 <Draggable key={g.id} draggableId={String(g.id)} index={idx}>
-                  {prov => (
+                  {(prov) => (
                     <li
                       ref={prov.innerRef}
                       {...prov.draggableProps}
@@ -71,9 +71,9 @@ export default function GoalList({ refreshFlag }) {
                       </div>
                       <button
                         onClick={() => handleDelete(g.id)}
-                        className="text-red-500 ml-4"
+                        className="text-red-500 ml-4 cursor-pointer"
                       >
-                        Delete
+                        <MdDelete size={20} />
                       </button>
                     </li>
                   )}

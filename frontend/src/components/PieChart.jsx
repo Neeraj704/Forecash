@@ -1,20 +1,20 @@
 // frontend/src/components/CategoryDonutChart.jsx
-import React, { useEffect, useState } from 'react';
-import { PieChart, Pie, Cell, Tooltip } from 'recharts';
-import { getTransactions } from '../api/transaction';
-import { useAuthStore } from '../store/authStore';
+import React, { useEffect, useState } from "react";
+import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import { getTransactions } from "../api/transaction";
+import { useAuthStore } from "../store/authStore";
 
-const COLORS = ['#ed7f19', '#eae3e3', '#eddf19', '#84e0ee', '#FF6B6B'];
+const COLORS = ["#ed7f19", "#eae3e3", "#eddf19", "#84e0ee", "#FF6B6B"];
 
 export default function CategoryDonutChart() {
   const { accessToken } = useAuthStore();
-  const [typeFilter, setTypeFilter] = useState('expense');
+  const [typeFilter, setTypeFilter] = useState("expense");
   const [data, setData] = useState([]);
   useEffect(() => {
     (async () => {
       const res = await getTransactions(accessToken);
       const agg = {};
-      res.data.forEach(t => {
+      res.data.forEach((t) => {
         if (t.type !== typeFilter) return;
         const name = t.category.name;
         agg[name] = (agg[name] || 0) + t.amount;
@@ -25,22 +25,24 @@ export default function CategoryDonutChart() {
 
   return (
     <div>
-      <div className='flex justify-between'>
-        <div className="text-white text-lg font-medium mb-2">Your Spendings</div>
+      <div className="flex justify-between">
+        <div className="text-white text-lg font-medium mb-2">
+          Your Spendings
+        </div>
         <div className="relative inline-block text-left">
-            <div className="mb-4 flex justify-end">
-              <select
-                value={typeFilter}
-                onChange={e => setTypeFilter(e.target.value)}
-                className="border p-1 rounded"
-              >
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
-              </select>
-            </div>
+          <div className="mb-4 flex justify-end">
+            <select
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+              className="border p-1 bg-[#2E3137] rounded"
+            >
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
           </div>
+        </div>
       </div>
-      <div className='flex justify-center'>
+      <div className="flex justify-center">
         <PieChart width={350} height={250}>
           <Pie
             data={data}
@@ -52,7 +54,10 @@ export default function CategoryDonutChart() {
             paddingAngle={2}
           >
             {data.map((_, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
             ))}
           </Pie>
           <Tooltip />
