@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-
+  
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=os.getenv("OPENROUTER_API_KEY")
@@ -86,7 +86,7 @@ Focus only on the user's current question:
 Begin your answer after this line. Respond naturally, clearly, and concisely using "I" if referring to yourself.
 """
 
-def return_answer(query, user, isAllowed, ifTransactions):
+async def return_answer(query, user, isAllowed, ifTransactions):
     print(ifTransactions)
     current_question = query
     user = user

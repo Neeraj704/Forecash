@@ -42,7 +42,7 @@ async def predict(request: Transaction):
     email = request.email
     isTransactionAllowed = request.isTransactionAllowed
     transactions_list = [t.dict() for t in request.transactions]
-    response = return_answer(query,email,isTransactionAllowed,transactions_list)
+    response = await return_answer(query,email,isTransactionAllowed,transactions_list)
     return {"received_data": response}
 
 
