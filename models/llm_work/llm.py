@@ -1,52 +1,52 @@
 import langchain
 from openai import OpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import Chroma
+#from langchain.embeddings import HuggingFaceEmbeddings
+#from langchain.vectorstores import Chroma
 from datetime import datetime
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
-embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+#embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-MiniLM-L3-v2")
   
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=os.getenv("OPENROUTER_API_KEY")
     )
 
-db = Chroma(
-    collection_name="remember_collection",
-    embedding_function=embedding_model,
-    persist_directory="./chroma_store"
-)
-
-def add_text(query, user):
-    db.add_texts(
-        texts = [query],
-        metadatas=[{"author": user,"timestamp": datetime.utcnow().isoformat()}]
-    )
-
-def return_all_from(user):
-    results = db.get(where={"author": user})
-    for items in results:
-        combined = list(zip(results['documents'],results['metadatas']))
-    sorted_by_time = sorted(combined, key=lambda x: x[1]["timestamp"], reverse=True)
-    return sorted_by_time
-
-def return_last_three(user):
-    messages = []
-    sorted_by_time = return_all_from(user)
-    if sorted_by_time is None:
-        return "None"
-        
-    flag = 0
-    for text, meta in sorted_by_time:
-        messages.append(text)
-        if flag == 2:
-            break
-        flag += 1
-    return messages
+#db = Chroma(
+#    collection_name="remember_collection",
+#    embedding_function=embedding_model,
+#    persist_directory="./chroma_store"
+#)
+#
+#def add_text(query, user):
+#    db.add_texts(
+#        texts = [query],
+#        metadatas=[{"author": user,"timestamp": datetime.utcnow().isoformat()}]
+#    )
+#
+#def return_all_from(user):
+#    results = db.get(where={"author": user})
+#    for items in results:
+#        combined = list(zip(results['documents'],results['metadatas']))
+#    sorted_by_time = sorted(combined, key=lambda x: x[1]["timestamp"], reverse=True)
+#    return sorted_by_time
+#
+#def return_last_three(user):
+#    messages = []
+#    sorted_by_time = return_all_from(user)
+#    if sorted_by_time is None:
+#        return "None"
+#        
+#    flag = 0
+#    for text, meta in sorted_by_time:
+#        messages.append(text)
+#        if flag == 2:
+#            break
+#        flag += 1
+#    return messages
 
 system_template = f"""
 You are a financial advisor. You are only allowed to provide financial advice and nothing else, except when the user asks about their previous messages or conversation history.
@@ -66,12 +66,7 @@ However, if the user is asking about their previous messages, conversation histo
 
 You may be given:
 
-1. **Recent User Messages (last 3):**  
-Use these **only if** the current question references them directly — for example, if the user is continuing a thought, asking a follow-up, or referring back to something just said.  
-Recent messages:
-{{last_user_messages}}
-
-2. **User Transaction History (optional):**  
+1. **User Transaction History (optional):**  
 Transaction history:
 {{user_transaction_history}}
 
@@ -90,7 +85,7 @@ async def return_answer(query, user, isAllowed, ifTransactions):
     print(ifTransactions)
     current_question = query
     user = user
-    add_text(current_question,user)
+    #add_text(current_question,user)
 
     prompt_template = ChatPromptTemplate.from_messages(
         [("system", system_template), ("user", "{text}")]
@@ -99,20 +94,20 @@ async def return_answer(query, user, isAllowed, ifTransactions):
     if isAllowed == True:
         print("transaction history given!")
         final_prompt = prompt_template.format_messages(
-        last_user_messages=return_last_three(user),
+        #last_user_messages=return_last_three(user),
         user_transaction_history=ifTransactions,
         text=current_question
     )
     else:
         print("transaction history not given!")
         final_prompt = prompt_template.format_messages(
-        last_user_messages=return_last_three(user),
+        #last_user_messages=return_last_three(user),
         user_transaction_history="not given by the user",
         text=current_question
     )
 
     response = client.chat.completions.create(
-    model="deepseek/deepseek-r1-0528-qwen3-8b:free",
+    model="deepseek/deepseek-r1-0528:free",
     messages=[{"role": "user", "content": str(final_prompt)}],
     temperature = 0.9
     )
