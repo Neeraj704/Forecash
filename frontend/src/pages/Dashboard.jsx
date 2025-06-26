@@ -10,6 +10,7 @@ import { useAuthStore } from '../store/authStore';
 import { getTransactions } from '../api/transaction';
 import AddGoalModal from '../components/AddGoalModal';
 import ForecastPlotly from '../components/ForecastPlotly';
+import ChatBot from '../components/ChatBot';
 import { forecast } from '../api/ml';
 import axios from 'axios';
 
@@ -203,6 +204,8 @@ export default function Dashboard(){
           {/* END OF TRANSACTION SIDE THINGS */}
         </main>
       </div>
+
+      <ChatBot></ChatBot>
 
       <BalanceModal isOpen={showBLModal} onRequestClose={()=>setShowBLModal(false)}/>
       <CreateTransactionModal
