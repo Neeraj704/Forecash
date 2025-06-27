@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import Navbar from "../components/Navbar";
-// import Sidebar from "../components/Sidebar";
 import BalanceModal from "../components/BalanceModal";
 import CreateTransactionModal from "../components/CreateTransactionModal";
 import TransactionList from "../components/TransactionList";
@@ -12,6 +11,7 @@ import AddGoalModal from "../components/AddGoalModal";
 import ForecastPlotly from "../components/ForecastPlotly";
 import { forecast } from "../api/ml";
 import axios from "axios";
+// import { ChatBot } from "../components/ChatBot";
 import { IoMdRefresh } from "react-icons/io";
 
 export default function Dashboard() {
@@ -84,7 +84,6 @@ export default function Dashboard() {
         </div>
       </div>
       <div className="flex flex-1 h-full">
-        {/* <Sidebar /> */}
         <main className="flex flex-auto h-[calc(100vh-100px)]">
           <div className="flex flex-col p-3 flex-1 ">
             <div className="flex-1">
@@ -219,6 +218,8 @@ export default function Dashboard() {
           {/* END OF TRANSACTION SIDE THINGS */}
         </main>
       </div>
+
+      {/* <ChatBot /> */}
 
       <BalanceModal
         isOpen={showBLModal}
