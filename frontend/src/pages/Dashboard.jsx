@@ -73,7 +73,7 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col min-h-screen text-white p-2">
       <Navbar />
-      <div className="h-16 bg-transparent m-2">
+      <div className="h-16 bg-transparent m-2 ml-5">
         <div>
           <h2 className="text-2xl font-bold text-purple-600">Dashboard</h2>
         </div>
@@ -163,7 +163,7 @@ export default function Dashboard() {
                   </div>
 
                   {/* SECOND BOX  */}
-                  <div className="flex-[66%] bg-[#2E3137] h-full rounded-2xl shadow p-6 relative overflow-scroll">
+                  <div className="flex-[66%] bg-[#2E3137] h-max-full rounded-2xl shadow p-6 relative overflow-hidden">
                     {forecastData ? (
                       <ForecastPlotly graph={forecastData.graph} />
                     ) : (
