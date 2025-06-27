@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useAuthStore } from "../store/authStore";
 import { getTransactions } from "../api/transaction";
+import { LuBotMessageSquare } from "react-icons/lu";
 
 export default function ChatBot() {
   const { user, accessToken } = useAuthStore();
