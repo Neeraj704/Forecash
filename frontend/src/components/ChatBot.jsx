@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import { useAuthStore } from "../store/authStore";
-import { askChatBot } from "../api/chatbot";
 import { getTransactions } from "../api/transaction";
-import { LuBotMessageSquare } from "react-icons/lu";
 
 export default function ChatBot() {
   const { user, accessToken } = useAuthStore();
@@ -37,11 +36,15 @@ export default function ChatBot() {
     setLoading(true);
 
     try {
+      const topTxns = [...transactions]
+        .sort((a, b) => b.amount - a.amount)
+        .slice(0, 10);
+
       const payload = {
         email: user.email,
         isTransactionAllowed: allowHistory,
         query: text,
-        transactions: transactions.map((t) => ({
+        transactions: topTxns.map((t) => ({
           amount: t.amount,
           type: t.type,
           date: `${t.date.split("T")[0]}T00:00:00`,
@@ -52,7 +55,9 @@ export default function ChatBot() {
 
       setMessages((msgs) => [...msgs, { role: "ai-typing", content: "" }]);
 
-      const res = await askChatBot(payload);
+      const res = await axios.post("http://51.20.53.130/predict", payload, {
+        timeout: 60000,
+      });
       const aiText = res.data.received_data;
 
       await new Promise((resolve) => {
@@ -70,7 +75,7 @@ export default function ChatBot() {
             clearInterval(interval);
             resolve();
           }
-        }, 10);
+        }, 20);
       });
 
       setMessages((msgs) =>
