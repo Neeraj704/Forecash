@@ -1,5 +1,6 @@
 import axios from 'axios';
-const ML_URL = 'https://forecash.onrender.com/predict';
+
+const ML_URL = import.meta.env.VITE_ML_URL;
 
 export async function forecast(user, allTxns) {
   const payload = {

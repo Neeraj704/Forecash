@@ -11,7 +11,7 @@ import AddGoalModal from "../components/AddGoalModal";
 import ForecastPlotly from "../components/ForecastPlotly";
 import { forecast } from "../api/ml";
 import axios from "axios";
-// import { ChatBot } from "../components/ChatBot";
+import ChatBot from "../components/ChatBot";
 import { IoMdRefresh } from "react-icons/io";
 
 export default function Dashboard() {
@@ -219,7 +219,7 @@ export default function Dashboard() {
         </main>
       </div>
 
-      {/* <ChatBot /> */}
+      <ChatBot />
 
       <BalanceModal
         isOpen={showBLModal}
