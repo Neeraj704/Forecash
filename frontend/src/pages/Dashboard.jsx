@@ -210,7 +210,7 @@ export default function Dashboard() {
           {/* START OF TRANSACTION SIDE THINGS */}
           <div className=" m-3 flex flex-col justify-between gap-5">
             {/* FIRST BOX  */}
-            <div className="border bg-[#2E3137] p-6 flex-1 rounded-2xl">
+            <div className=" bg-[#2E3137] p-6 flex-1 rounded-2xl">
               <TransactionList refreshFlag={txnFlag} />
             </div>
             {/* END OF FIRST BOX  */}
