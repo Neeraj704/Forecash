@@ -84,7 +84,7 @@ export default function Dashboard() {
         </div>
       </div>
       <div className="flex flex-1 h-full">
-        <main className="flex flex-auto h-[calc(100vh-100px)]">
+        <main className="flex flex-auto">
           <div className="flex flex-col p-3 flex-1 ">
             <div className="flex-1">
               {/* START OF LEFT 4 BOXES THING */}
@@ -208,9 +208,9 @@ export default function Dashboard() {
           </div>
 
           {/* START OF TRANSACTION SIDE THINGS */}
-          <div className="m-3 flex flex-col justify-between gap-5">
+          <div className=" m-3 flex flex-col justify-between gap-5">
             {/* FIRST BOX  */}
-            <div className="bg-[#2E3137] p-6 flex-1 rounded-2xl">
+            <div className="border bg-[#2E3137] p-6 flex-1 rounded-2xl">
               <TransactionList refreshFlag={txnFlag} />
             </div>
             {/* END OF FIRST BOX  */}
