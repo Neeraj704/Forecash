@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useAuthStore } from "../store/authStore";
 import { getTransactions } from "../api/transaction";
+import { Bot, MessageSquare, Send, Loader, BotMessageSquare as LuBotMessageSquare } from 'lucide-react';
 
 export default function ChatBot() {
   const { user, accessToken } = useAuthStore();
@@ -105,6 +106,7 @@ export default function ChatBot() {
         onClick={() => setOpen((o) => !o)}
         className="fixed bottom-4 right-4 w-16 h-16 bg-purple-600 rounded-full text-white flex items-center justify-center"
       >
+        
         <LuBotMessageSquare size={24} />
       </button>
 
