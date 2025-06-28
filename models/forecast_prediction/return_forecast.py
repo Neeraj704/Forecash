@@ -139,7 +139,7 @@ def return_forecast(initial_balance, transactions):
 
     # Create the interactive plotly figure
     fig = go.Figure()
-
+    
     # Add actual balance trace
     fig.add_trace(go.Scatter(
         x=index_1,
@@ -147,21 +147,21 @@ def return_forecast(initial_balance, transactions):
         mode='lines+markers',
         name='Day Wise Balance',
         line=dict(
-            color='#9370DB',  # Purple color
+            color='#A259FF',  # Updated Accent Color
             width=3,
             shape='spline'
         ),
         marker=dict(
-            color='#9370DB',
+            color='#A259FF',
             size=6,
-            line=dict(color='#D8BFD8', width=1)  # Lavender border
+            line=dict(color='#E0E0E0', width=1)  # Updated Neutral Text as border
         ),
         hovertemplate='<b>Day %{x}</b><br>' +
                       'Balance: ₹%{y:,.2f}<br>' +
                       '<extra></extra>',
         connectgaps=True
     ))
-
+    
     # Add predictions trace
     fig.add_trace(go.Scatter(
         x=index_2[:10],
@@ -169,91 +169,91 @@ def return_forecast(initial_balance, transactions):
         mode='lines+markers',
         name='Predictions',
         line=dict(
-            color='#c5f15c',  # Medium Purple
+            color='#00CC66',  # Updated Success Color
             width=3,
             dash='dash',
             shape='spline'
         ),
         marker=dict(
-            color='#c5f15c',
+            color='#00CC66',
             size=6,
-            line=dict(color='#D8BFD8', width=1)
+            line=dict(color='#E0E0E0', width=1)
         ),
         hovertemplate='<b>Day %{x}</b><br>' +
                       'Predicted: ₹%{y:,.2f}<br>' +
                       '<extra></extra>'
     ))
-
+    
     # Add connecting line between actual and predictions
     fig.add_trace(go.Scatter(
         x=[index_1[-1], index_2[0]],
         y=[day_balance_flat[-1], predictions_flat[0]],
         mode='lines',
         line=dict(
-            color='#c5f15c',
+            color='#00CC66',
             width=2,
             dash='dash'
         ),
         showlegend=False,
         hoverinfo='skip'
     ))
-
-    # Update layout with purple dashboard theme
+    
+    # Update layout with modern minimalistic theme
     fig.update_layout(
-        plot_bgcolor='#2E3137',
-        paper_bgcolor='#2E3137',
+        plot_bgcolor='#1E1E2F',
+        paper_bgcolor='#1E1E2F',
         xaxis=dict(
             title=dict(
                 text='<b>Time Period (Days)</b>',
-                font=dict(color='#D8BFD8', size=14)
+                font=dict(color='#E0E0E0', size=14)
             ),
-            gridcolor='rgba(216, 191, 216, 0.2)',
+            gridcolor='rgba(224, 224, 224, 0.2)',
             gridwidth=1,
-            tickfont=dict(color='#D8BFD8', size=12),
-            linecolor='rgba(216, 191, 216, 0.3)',
+            tickfont=dict(color='#E0E0E0', size=12),
+            linecolor='rgba(224, 224, 224, 0.3)',
             linewidth=2,
             showspikes=True,
-            spikecolor='#D8BFD8',
+            spikecolor='#E0E0E0',
             spikethickness=1,
             spikedash='dot'
         ),
         yaxis=dict(
             title=dict(
                 text='<b>Balance Amount (₹)</b>',
-                font=dict(color='#D8BFD8', size=14)
+                font=dict(color='#E0E0E0', size=14)
             ),
-            gridcolor='rgba(216, 191, 216, 0.2)',
+            gridcolor='rgba(224, 224, 224, 0.2)',
             gridwidth=1,
-            tickfont=dict(color='#D8BFD8', size=12),
+            tickfont=dict(color='#E0E0E0', size=12),
             tickformat='₹,.0f',
-            linecolor='rgba(216, 191, 216, 0.3)',
+            linecolor='rgba(224, 224, 224, 0.3)',
             linewidth=2,
             showspikes=True,
-            spikecolor='#D8BFD8',
+            spikecolor='#E0E0E0',
             spikethickness=1,
             spikedash='dot'
         ),
         legend=dict(
-            bgcolor='rgba(46, 49, 55, 0.8)',
-            bordercolor='rgba(216, 191, 216, 0.5)',
+            bgcolor='rgba(44, 44, 62, 0.8)',  # Secondary Color with opacity
+            bordercolor='rgba(224, 224, 224, 0.5)',
             borderwidth=1,
-            font=dict(color='#D8BFD8', size=12),
+            font=dict(color='#E0E0E0', size=12),
             x=0.02,
             y=0.98
         ),
         hoverlabel=dict(
-            bgcolor='#2E3137',
-            bordercolor='#D8BFD8',
-            font=dict(color='#D8BFD8', size=12),
+            bgcolor='#1E1E2F',
+            bordercolor='#E0E0E0',
+            font=dict(color='#E0E0E0', size=12),
             align='left'
         ),
-        font=dict(family='Arial', color='#D8BFD8'),
+        font=dict(family='Arial', color='#E0E0E0'),
         width=1000,
         height=600,
         margin=dict(l=80, r=80, t=100, b=80),
         hovermode='closest'
     )
-
+    
     # Add range selector buttons for interactivity
     fig.update_layout(
         xaxis=dict(
@@ -264,21 +264,21 @@ def return_forecast(initial_balance, transactions):
                     dict(count=30, label="30D", step="day", stepmode="backward"),
                     dict(step="all", label="All")
                 ]),
-                bgcolor='rgba(46, 49, 55, 0.8)',
-                bordercolor='rgba(216, 191, 216, 0.5)',
+                bgcolor='rgba(44, 44, 62, 0.8)',
+                bordercolor='rgba(224, 224, 224, 0.5)',
                 borderwidth=1,
-                font=dict(color='#D8BFD8')
+                font=dict(color='#E0E0E0')
             ),
             rangeslider=dict(
                 visible=True,
-                bgcolor='rgba(46, 49, 55, 0.6)',
-                bordercolor='rgba(216, 191, 216, 0.3)',
+                bgcolor='rgba(44, 44, 62, 0.6)',
+                bordercolor='rgba(224, 224, 224, 0.3)',
                 borderwidth=1
             ),
             type="linear"
         )
     )
-
+    
     # Add current and projected annotations
     fig.add_annotation(
         x=index_1[-1],
@@ -286,39 +286,40 @@ def return_forecast(initial_balance, transactions):
         text=f"<b>Current: ₹{float(data_final_inverse[-1]):,.2f}</b>",
         showarrow=True,
         arrowhead=2,
-        arrowcolor='#9370DB',
+        arrowcolor='#A259FF',
         arrowwidth=2,
-        bgcolor='#2E3137',
-        bordercolor='#9370DB',
+        bgcolor='#1E1E2F',
+        bordercolor='#A259FF',
         borderwidth=1,
-        font=dict(color='#D8BFD8', size=12)
+        font=dict(color='#E0E0E0', size=12)
     )
-
+    
     fig.add_annotation(
         x=index_2[9],
         y=float(predictions_further[9]),
         text=f"<b>Projected: ₹{float(predictions_further[9]):,.2f}</b>",
         showarrow=True,
         arrowhead=2,
-        arrowcolor='#c5f15c',
+        arrowcolor='#00CC66',
         arrowwidth=2,
-        bgcolor='#2E3137',
-        bordercolor='#c5f15c',
+        bgcolor='#1E1E2F',
+        bordercolor='#00CC66',
         borderwidth=1,
-        font=dict(color='#D8BFD8', size=12)
+        font=dict(color='#E0E0E0', size=12)
     )
-
+    
     fig.update_layout(
         xaxis=dict(
             type='date',
             title='Time Period (Days)'
         )
     )
-
+    
     # Disable toolbar for cleaner embedding
     plot_json = fig.to_json()
-
+    
     return {
-    "graph": json.loads(plot_json),
-    "monthEndBalance": month_end_predictions
+        "graph": json.loads(plot_json),
+        "monthEndBalance": month_end_predictions
     }
+
