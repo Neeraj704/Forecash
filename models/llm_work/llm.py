@@ -1,19 +1,18 @@
 import langchain
-from openai import OpenAI
+#from openai import OpenAI
 from langchain_core.prompts import ChatPromptTemplate
 #from langchain.embeddings import HuggingFaceEmbeddings
 #from langchain.vectorstores import Chroma
 from datetime import datetime
 import os
 from dotenv import load_dotenv
+import google.generativeai as genai
 load_dotenv()
 
 #embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-MiniLM-L3-v2")
   
-client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=os.getenv("OPENROUTER_API_KEY")
-    )
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 #db = Chroma(
 #    collection_name="remember_collection",
@@ -106,16 +105,22 @@ async def return_answer(query, user, isAllowed, ifTransactions):
         text=current_question
     )
 
-    response = client.chat.completions.create(
-    model="meta-llama/llama-4-maverick:free",
-    messages=[{"role": "user", "content": str(final_prompt)}],
-    temperature = 0.9
-    )
+    formatted_prompt = ""
+    for message in final_prompt:
+        if message.type == "system":
+            formatted_prompt += message.content.strip() + "\n"
+        elif message.type == "user":
+            formatted_prompt += f"User: {message.content.strip()}\n"
 
-    if response and hasattr(response, 'choices') and len(response.choices) > 0:
-        print(response.choices[0].message.content)
-        return(response.choices[0].message.content)
+
+
+    response = model.generate_content(formatted_prompt)
+
+    if response and response.text:
+        print(response.text)
+        return response.text
     else:
         print("Sorry, I couldn't generate a response at this time.")
-        return("Sorry, I couldn't generate a response at this time.")
+        return "Sorry, I couldn't generate a response at this time."
+
     
