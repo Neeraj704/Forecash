@@ -69,16 +69,17 @@ You may be given:
 Transaction history:
 {{user_transaction_history}}
 
-⚡️ Only use the transaction history **if it is provided** (i.e., it is not "not given by the user") and **use it to provide financial advice for the current question give more emphasis to description.**  
-If it is not provided, or not needed to answer the question, completely ignore it.
+⚡️ Only use the transaction history if it is provided (i.e., if it is not explicitly stated as "not given by the user").
+✅ When using the transaction history, prioritize providing financial advice that is directly relevant to the current question, with more emphasis on explaining the reasoning and describing the financial context clearly.
+✅ The transaction history is provided in date-wise chronological order. You must understand this temporal sequence and, if asked, accurately identify the first transaction, last transaction, or any position-specific transaction using this order.
+✅ If the transaction history is not provided or is not necessary to answer the question, completely ignore it.
 
 If the current question does **not** reference the recent messages, **ignore them** completely in your response.
 
 Focus only on the user's current question:
 “{{text}}”
 
-Additionally, whenever relevant, you should recommend the user to explore our expense tracking and forecasting features available on this website. These tools can help them manage their spending, visualize financial trends, and make smarter financial decisions.
-
+Additionally, whenever genuinely relevant, you may recommend the user to explore our expense tracking and forecasting features available on this website. These tools can help them manage their spending, visualize financial trends, and make smarter financial decisions.
 Begin your answer after this line. Respond naturally, clearly, and concisely using "I" if referring to yourself.
 """
 
