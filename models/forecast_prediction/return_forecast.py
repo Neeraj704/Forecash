@@ -122,7 +122,17 @@ def return_forecast(initial_balance, transactions):
     # Flatten the nested arrays
     data_final_inverse = original_data  
 
-    #print(data_final_inverse)
+    # <- logic to fill gaps ->
+    last_date_index1 = datetime.strptime(index_1[-1], '%Y-%m-%d')
+    first_date_index2 = datetime.strptime(index_2[0], '%Y-%m-%d')
+    gap_days = (first_date_index2 - last_date_index1).days
+    if gap_days > 1:
+        for i in range(1, gap_days):
+            missing_date = (last_date_index1 + timedelta(days=i)).strftime('%Y-%m-%d')
+            index_1.append(missing_date)
+            data_final_inverse.append(data_final_inverse[-1])  
+
+    # print(data_final_inverse)
     day_balance_flat = [item[0] if isinstance(item, (list, np.ndarray)) else item for item in data_final_inverse]
     predictions_flat = [item[0] if isinstance(item, (list, np.ndarray)) else item for item in predictions_further[:10]]
 
@@ -135,7 +145,7 @@ def return_forecast(initial_balance, transactions):
 
     month_to_dates = {}
 
-    # Group dates by (year, month)
+    # <- this is for month end date bro ->
     for i, date in enumerate(dates):
         key = (date.year, date.month)
         if key not in month_to_dates:
@@ -222,8 +232,8 @@ def return_forecast(initial_balance, transactions):
 
     # Update layout with purple dashboard theme
     fig.update_layout(
-        plot_bgcolor='#2E3137',
-        paper_bgcolor='#2E3137',
+        plot_bgcolor='#201c2c',
+        paper_bgcolor='#201c2c',
         xaxis=dict(
             title=dict(
                 text='<b>Time Period (Days)</b>',
@@ -264,7 +274,7 @@ def return_forecast(initial_balance, transactions):
             y=0.98
         ),
         hoverlabel=dict(
-            bgcolor='#2E3137',
+            bgcolor='#201c2c',
             bordercolor='#D8BFD8',
             font=dict(color='#D8BFD8', size=12),
             align='left'
@@ -310,7 +320,7 @@ def return_forecast(initial_balance, transactions):
         arrowhead=2,
         arrowcolor='#9370DB',
         arrowwidth=2,
-        bgcolor='#2E3137',
+        bgcolor='#201c2c',
         bordercolor='#9370DB',
         borderwidth=1,
         font=dict(color='#D8BFD8', size=12)
@@ -324,7 +334,7 @@ def return_forecast(initial_balance, transactions):
         arrowhead=2,
         arrowcolor='#c5f15c',
         arrowwidth=2,
-        bgcolor='#2E3137',
+        bgcolor='#201c2c',
         bordercolor='#c5f15c',
         borderwidth=1,
         font=dict(color='#D8BFD8', size=12)
