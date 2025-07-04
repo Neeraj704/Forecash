@@ -9,9 +9,10 @@ import json
 import calendar
 
 # remember add category later ~
+lgbm_loaded = joblib.load('ml_model.pkl')
+scaler = joblib.load('scaler.pkl')
+model = load_model('good.h5')
 
-model = load_model('try2.h5')
-scaler = StandardScaler()
 
 value = 7
 def return_forecast(initial_balance, transactions):
@@ -63,9 +64,12 @@ def return_forecast(initial_balance, transactions):
     data_final = np.array(data_final[-7:])
     percentage_changes = (np.diff(data_final) / data_final[:-1]) * 100
     data_final = percentage_changes
-    print(data_final)
-    data_final = np.append(data_final, 3)
+    
+    lgbm_prediction = lgbm_loaded.predict(scaler.transform(data_final.reshape(1, -1)))
+    print(value)
+    data_final = np.append(data_final, lgbm_prediction[0])
     data_final = data_final.reshape(-1, 1)
+    print(data_final)
     data_final = data_final.flatten()
 
     
@@ -80,8 +84,12 @@ def return_forecast(initial_balance, transactions):
             print(array_sent)
             prediction = model.predict(array_sent)
             prediction_saved = prediction[0][0]
-            last_three = np.append(np.append(last_three[1:-1], prediction_saved), last_three[-1])
+            last_three = np.append(last_three[1:-1], prediction_saved)
+            prediction_trend = lgbm_loaded.predict(last_three.reshape(1, -1))
+            last_three = np.append(last_three, prediction_trend[0]) 
             save_predictions.append(prediction_saved)
+
+            
         return(save_predictions)
 
     predictions_further = predict_next_10(data_final)
