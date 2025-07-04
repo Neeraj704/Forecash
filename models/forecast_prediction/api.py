@@ -25,8 +25,15 @@ class BalanceRequest(BaseModel):
 
 api.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origins=[
+    "https://forecash.vercel.app",  # deployed site
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://localhost:8080",
+    "http://localhost:8000",
+    "https://call2roast.vercel.app"
+    ],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
