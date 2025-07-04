@@ -101,9 +101,9 @@ def return_forecast(initial_balance, transactions):
     dates = [item for item in individual_dates if isinstance(item, str)]
     last_date = dates[-1]
     last_date = datetime.strptime(last_date, '%Y-%m-%d')
-
-    next_10_dates = [(last_date + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(1, 11)]
-    next_30_dates = [(last_date + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(1, 31)]
+    today = datetime.today()
+    next_10_dates = [(today + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(1, 11)]
+    next_30_dates = [(today + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(1, 31)]
     #print(next_10_dates)
 
 
