@@ -43,7 +43,7 @@ def index():
     return {"message":"Hello World"}
 
 
-@api.post('/predict')
+@api.post('/predict_forecast')
 async def predict(request: BalanceRequest):
     inital_balance = request.initialBalance
     transactions = request.transactions
