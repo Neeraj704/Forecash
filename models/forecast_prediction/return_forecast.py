@@ -46,16 +46,39 @@ def return_forecast(initial_balance, transactions):
 
     data_final.append(current_day_balance)
     individual_dates.append(remember_date)
+    individual_dates = [date[:10] for date in individual_dates]
     # logic to fill gaps
-    last_known_date = datetime.fromisoformat(individual_dates[-1])
+    unique_dates = sorted(set(individual_dates))
+    filled_dates = []
+    filled_balances = []
+
+
+    date_objects = [datetime.strptime(date, '%Y-%m-%d') for date in unique_dates]
+
+    
+    current_date = date_objects[0]
     yesterday = datetime.today() - timedelta(days=1)
     yesterday = datetime.strptime(yesterday.strftime('%Y-%m-%d'), '%Y-%m-%d')
-    while last_known_date < yesterday:
-        last_known_date += timedelta(days=1)
-        individual_dates.append(last_known_date.strftime('%Y-%m-%d'))
-        data_final.append(data_final[-1]) 
 
-    individual_dates = [date[:10] for date in individual_dates]
+    current_balance_index = 0
+
+    while current_date <= yesterday:
+        filled_dates.append(current_date.strftime('%Y-%m-%d'))
+
+        if current_balance_index < len(unique_dates) and current_date.strftime('%Y-%m-%d') == unique_dates[current_balance_index]:
+            
+            filled_balances.append(data_final[current_balance_index])
+            current_balance_index += 1
+        else:
+            
+            filled_balances.append(filled_balances[-1])
+
+        current_date += timedelta(days=1)
+
+    individual_dates = filled_dates
+    data_final = filled_balances 
+    # logic to fill dates ends here
+
 
     while len(individual_dates) < 7:
         first_date = datetime.strptime(individual_dates[0], '%Y-%m-%d')
@@ -123,11 +146,11 @@ def return_forecast(initial_balance, transactions):
     #print(next_10_dates)
 
 
-    # date_setup
+    # date setup for graph
     index_1 = individual_dates
     index_2 = next_10_dates
 
-    # Flatten the nested arrays
+    
     data_final_inverse = original_data  
 
     # print(data_final_inverse)
