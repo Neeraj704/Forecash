@@ -1,92 +1,155 @@
 "use client";
+
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { FaSpinner, FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [loadingOAuth, setLoadingOAuth] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    const result = await signIn("credentials", {
+    const res = await signIn("credentials", {
       redirect: false,
       email,
       password,
     });
-    if (result.error) {
+
+    if (res.error) {
       setError("Invalid email or password.");
+      setLoading(false);
     } else {
       router.push("/dashboard");
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow">
-        <h2 className="text-2xl font-semibold mb-6 text-center">Sign In</h2>
-        {error && <p className="mb-4 text-red-600 text-sm text-center">{error}</p>}
+  const handleOAuth = async (provider) => {
+    setLoadingOAuth(provider);
+    await signIn(provider, { callbackUrl: "/dashboard" });
+    setLoadingOAuth("");
+  };
 
-        <form onSubmit={handleSubmit}>
-          <label className="block mb-4">
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
+      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg transform hover:scale-[1.01] transition">
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+          Sign In
+        </h2>
+
+        {error && (
+          <p className="mb-4 text-red-600 text-sm text-center">{error}</p>
+        )}
+
+        {/* Credentials Form */}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <label className="block">
             <span className="text-gray-700">Email</span>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             />
           </label>
 
-          <label className="block mb-6">
+          <label className="block">
             <span className="text-gray-700">Password</span>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             />
           </label>
 
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition mb-4"
+            disabled={loading}
+            className={`w-full flex items-center justify-center py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition cursor-pointer ${
+              loading ? "opacity-70" : ""
+            }`}
           >
-            Sign In
+            {loading ? (
+              <>
+                <FaSpinner className="animate-spin mr-2" /> Signing In…
+              </>
+            ) : (
+              "Sign In"
+            )}
           </button>
         </form>
 
-        <div className="flex flex-col space-y-3 mb-4">
+        {/* OR Separator */}
+        <div className="flex items-center my-4">
+          <hr className="flex-grow border-gray-300" />
+          <span className="px-2 text-gray-500">OR</span>
+          <hr className="flex-grow border-gray-300" />
+        </div>
+
+        {/* OAuth Buttons */}
+        <div className="space-y-3">
           <button
-            onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-            className="flex items-center justify-center py-3 border rounded-xl hover:bg-gray-50 transition"
+            onClick={() => handleOAuth("google")}
+            disabled={!!loadingOAuth}
+            className={`w-full flex items-center justify-center py-3 border rounded-xl hover:shadow-md transition cursor-pointer bg-white ${
+              loadingOAuth === "google" ? "opacity-70" : ""
+            }`}
           >
-            <img src="/icons/google.svg" alt="Google" className="w-5 h-5 mr-2" />
-            Continue with Google
+            {loadingOAuth === "google" ? (
+              <FaSpinner className="animate-spin mr-2 text-gray-700" />
+            ) : (
+              <FcGoogle className="mr-2 text-2xl" />
+            )}
+            <span className="font-medium text-gray-700">
+              {loadingOAuth === "google"
+                ? "Redirecting…"
+                : "Continue with Google"}
+            </span>
           </button>
+
           <button
-            onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
-            className="flex items-center justify-center py-3 border rounded-xl hover:bg-gray-50 transition"
+            onClick={() => handleOAuth("github")}
+            disabled={!!loadingOAuth}
+            className={`w-full flex items-center justify-center py-3 border rounded-xl hover:shadow-md transition cursor-pointer ${
+              loadingOAuth === "github"
+                ? "opacity-70"
+                : "bg-gray-900 hover:bg-gray-800"
+            }`}
           >
-            <img src="/icons/github.svg" alt="GitHub" className="w-5 h-5 mr-2" />
-            Continue with GitHub
+            {loadingOAuth === "github" ? (
+              <FaSpinner className="animate-spin mr-2 text-white" />
+            ) : (
+              <FaGithub className="mr-2 text-xl text-white" />
+            )}
+            <span className="font-medium text-white">
+              {loadingOAuth === "github"
+                ? "Redirecting…"
+                : "Continue with GitHub"}
+            </span>
           </button>
         </div>
 
-        <p className="text-center text-sm">
+        <p className="mt-6 text-center text-sm text-gray-600">
           Don’t have an account?{" "}
-          <button
-            onClick={() => router.push("/signup")}
-            className="text-green-600 hover:underline"
+          <Link
+            href="/signup"
+            className="text-blue-600 hover:underline font-medium cursor-pointer"
           >
             Sign Up
-          </button>
+          </Link>
         </p>
       </div>
     </div>
