@@ -4,9 +4,9 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
-const handler = NextAuth({
+export const authOptions = {
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   providers: [
@@ -25,9 +25,14 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const user = await prisma.user.findUnique({ where: { email: credentials.email } });
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+        });
         if (!user || !user.password) return null;
-        const isValid = await bcrypt.compare(credentials.password, user.password);
+        const isValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
         return isValid ? user : null;
       },
     }),
@@ -36,14 +41,29 @@ const handler = NextAuth({
     signIn: "/login",
   },
   callbacks: {
+    async jwt({ token, user }) {
+      if (user?.id) {
+        const onboard = await prisma.onboarding.findUnique({
+          where: { userId: user.id },
+        });
+        token.onboardingCompleted = onboard?.completed || false;
+      }
+      return token;
+    },
+    // Expose onboardingCompleted in the session
     async session({ session, token }) {
       session.user.id = token.sub;
+      session.user.onboardingCompleted = token.onboardingCompleted || false;
       return session;
     },
+    // We no longer use redirect({ token }), let middleware handle routing
     async redirect({ url, baseUrl }) {
-      return `${baseUrl}/dashboard`;
+      // Default to dashboard after signin
+      return baseUrl;
     },
   },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

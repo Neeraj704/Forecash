@@ -26,17 +26,12 @@ export default function LoginPage() {
       password,
     });
 
-    if (res.error) {
-      setError("Invalid email or password.");
-      setLoading(false);
-    } else {
-      router.push("/dashboard");
-    }
+    router.push("/");
   };
 
   const handleOAuth = async (provider) => {
     setLoadingOAuth(provider);
-    await signIn(provider, { callbackUrl: "/dashboard" });
+    await signIn(provider, { callbackUrl: "/" });
     setLoadingOAuth("");
   };
 

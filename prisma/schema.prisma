@@ -8,15 +8,30 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String?  @unique
+  email         String?        @unique
   emailVerified DateTime?
   image         String?
-
-  password      String?  
+  password      String?
   accounts      Account[]
   sessions      Session[]
+  onboarding    Onboarding?
+}
+
+model Onboarding {
+  id             String   @id @default(cuid())
+  user           User     @relation(fields: [userId], references: [id])
+  userId         String   @unique
+  mode           String
+  currency       String
+  initialBalance Float?
+  dailyLimit     Float?
+  fimcpPhone     String?
+  consent        Boolean
+  completed      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Account {

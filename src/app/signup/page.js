@@ -33,7 +33,7 @@ export default function SignUpPage() {
         setError(res.error);
         setLoading(false);
       } else {
-        router.push("/dashboard");
+        router.push("/");
       }
     } catch (err) {
       setError(err.response?.data?.error || "Something went wrong.");
@@ -43,7 +43,7 @@ export default function SignUpPage() {
 
   const handleOAuth = async (provider) => {
     setLoadingOAuth(provider);
-    await signIn(provider, { callbackUrl: "/dashboard" });
+    await signIn(provider, { callbackUrl: "/" });
     setLoadingOAuth("");
   };
 
