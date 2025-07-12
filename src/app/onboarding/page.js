@@ -340,7 +340,7 @@ export default function OnboardingPage() {
                             : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
                         }`}
                         onClick={()=>upd("setGoalNow", opt==="Yes")}>
-                        {opt === "Yes" ? "Yes, let's set goals" : "Maybe later"}
+                        {opt === "Yes" ? "Yes, let&apos;s set goals" : "Maybe later"}
                       </button>
                     ))}
                   </div>
@@ -501,7 +501,7 @@ export default function OnboardingPage() {
               <h2 className="text-4xl font-bold text-white mb-2">Woohoo! 🎊</h2>
               <p className="text-xl text-purple-200 font-semibold">Onboarding Complete!</p>
               <p className="text-purple-300">
-                You're all set up and ready to take control of your finances!
+                You&apos;re all set up and ready to take control of your finances!
               </p>
               
               {/* Countdown Text */}
