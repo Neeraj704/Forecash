@@ -8,36 +8,33 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
-  email         String?        @unique
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  accounts      Account[]
-  sessions      Session[]
-  onboarding    Onboarding?
+
+  // Auth
+  oauthAccounts      OAuthAccount[]
+  sessions           Session[]
+  verificationTokens VerificationToken[]
+
+  // App Data
+  onboardingPreference OnboardingPreference?
+  accounts             Account[]
+  categories           Category[]
+  transactions         Transaction[]
+  goals                Goal[]
+  contactMessages      ContactMessage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
-model Onboarding {
-  id             String   @id @default(cuid())
-  user           User     @relation(fields: [userId], references: [id])
-  userId         String   @unique
-  mode           String
-  currency       String
-  initialBalance Float?
-  dailyLimit     Float?
-  fimcpPhone     String?
-  consent        Boolean
-  completed      Boolean  @default(false)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-}
-
-model Account {
-  id                String   @id @default(cuid())
+model OAuthAccount {
+  id                String  @id @default(cuid())
   userId            String
-  type              String
   provider          String
   providerAccountId String
   refresh_token     String?
@@ -66,6 +63,90 @@ model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
+  User       User?    @relation(fields: [userId], references: [id])
+  userId     String?
 
   @@unique([identifier, token])
+}
+
+model OnboardingPreference {
+  id             String    @id @default(cuid())
+  userId         String    @unique
+  user           User      @relation(fields: [userId], references: [id])
+  theme          String
+  language       String
+  currency       String
+  mode           String
+  initialBalance Float?
+  dailyLimit     Float?
+  fimcpPhone     String?
+  features       String[]
+  setGoalNow     Boolean
+  assistantMode  String
+  assistantTone  String
+  enable2FA      Boolean
+  accessibility  String[]
+  completed      Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Account {
+  id           String        @id @default(cuid())
+  name         String?
+  balance      Float         @default(0)
+  userId       String
+  user         User          @relation(fields: [userId], references: [id])
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Category {
+  id           Int           @id @default(autoincrement())
+  name         String
+  userId       String
+  user         User          @relation(fields: [userId], references: [id])
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Transaction {
+  id          Int      @id @default(autoincrement())
+  amount      Float
+  description String?
+  date        DateTime @default(now())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  type        String   @default("expense") // "income" or "expense"
+  accountId   String?
+  account     Account? @relation(fields: [accountId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Goal {
+  id        Int      @id @default(autoincrement())
+  name      String
+  target    Float
+  current   Float    @default(0)
+  priority  Int      @default(0)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  message   String   @db.Text
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }

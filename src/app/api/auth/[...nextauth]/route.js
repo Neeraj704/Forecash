@@ -43,27 +43,29 @@ export const authOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user?.id) {
-        const onboard = await prisma.onboarding.findUnique({
+        token.sub = user.id;
+
+        const onboard = await prisma.onboardingPreference.findUnique({
           where: { userId: user.id },
         });
+
         token.onboardingCompleted = onboard?.completed || false;
       }
+
       return token;
     },
-    // Expose onboardingCompleted in the session
+
     async session({ session, token }) {
       session.user.id = token.sub;
       session.user.onboardingCompleted = token.onboardingCompleted || false;
       return session;
     },
-    // We no longer use redirect({ token }), let middleware handle routing
+
     async redirect({ url, baseUrl }) {
-      // Default to dashboard after signin
       return baseUrl;
     },
   },
 };
 
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };

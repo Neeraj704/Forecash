@@ -20,13 +20,24 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
 
-    const res = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
 
-    router.push("/");
+      if (res?.error) {
+        setError("Login failed: " + res.error);
+        setLoading(false);
+      } else {
+        router.push("/");
+      }
+    } catch (err) {
+      console.error("SignIn error:", err);
+      setError("Something went wrong.");
+      setLoading(false);
+    }
   };
 
   const handleOAuth = async (provider) => {
