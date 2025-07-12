@@ -134,7 +134,7 @@ model Goal {
   name      String
   target    Float
   current   Float    @default(0)
-  priority  Int      @default(0)
+  priority  Int?      @default(0)
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
